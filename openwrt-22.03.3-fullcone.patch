@@ -26,7 +26,7 @@ index 0000000000..f8108a044c
 +  DEPENDS:=@IPV6 +kmod-nft-core +kmod-nf-conntrack +kmod-nf-conntrack6
 +  TITLE:=nftables fullcone expression support
 +  FILES:= $(PKG_BUILD_DIR)/nft_fullcone.ko
-+#  KCONFIG:= CONFIG_NFT_FULLCONE=y CONFIG_NF_NAT=y CONFIG_NF_NAT_IPV6=y CONFIG_NF_CONNTRACK_EVENTS=y CONFIG_NF_CONNTRACK_CHAIN_EVENTS=y
++  KCONFIG:= CONFIG_NFT_FULLCONE=y CONFIG_NF_NAT=y CONFIG_NF_NAT_IPV6=y CONFIG_NF_CONNTRACK_EVENTS=y CONFIG_NF_CONNTRACK_CHAIN_EVENTS=y
 +  PROVIDES:=$(PKG_NAME)
 +  AUTOLOAD:=$(call AutoProbe,nft_fullcone)
 +endef
@@ -45,6 +45,7 @@ index 0000000000..f8108a044c
 +		EXTRA_CFLAGS="$(BUILDFLAGS)" \
 +		$(if $(CONFIG_IPv6),EXTRA_CFLAGS+="-DCONFIG_SFE_ECM",) \
 +		modules
++
 +endef
 +
 +$(eval $(call KernelPackage,nft-fullcone))
@@ -77,7 +78,7 @@ new file mode 100644
 index 0000000000..0757ef9b15
 --- /dev/null
 +++ b/package/kernel/nft-fullcone/src/nf_nat_fullcone.c
-@@ -0,0 +1,1590 @@
+@@ -0,0 +1,1598 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +
 +/*
@@ -934,7 +935,11 @@ index 0000000000..0757ef9b15
 +		/* for now we do the same thing for both --random and --random-fully */
 +
 +		/* select a random starting point */
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
++		start = (uint16_t) (get_random_u32() % (u32) range_size);
++#else
 +		start = (uint16_t) (prandom_u32() % (u32) range_size);
++#endif
 +	} else {
 +
 +		if ((original_port >= min && original_port <= min + range_size - 1)
@@ -1007,7 +1012,11 @@ index 0000000000..0757ef9b15
 +		/* for now we do the same thing for both --random and --random-fully */
 +
 +		/* select a random starting point */
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
++		start = (uint16_t) (get_random_u32() % (u32) range_size);
++#else
 +		start = (uint16_t) (prandom_u32() % (u32) range_size);
++#endif
 +	} else {
 +
 +		if ((original_port >= min && original_port <= min + range_size - 1)
@@ -1819,7 +1828,6 @@ index 0000000000..289ce5c443
 +	memset(&dst->max_addr, 0, sizeof(dst->max_addr));
 +	// base_proto is nf_nat_range2 specific
 +	memset(&dst->base_proto, 0, sizeof(dst->base_proto));
-+
 +	dst->flags	 = src->flags;
 +	dst->min_addr.ip = src->min_ip;
 +	dst->max_addr.ip = src->max_ip;
@@ -2299,7 +2307,6 @@ index 8434234156..5342ac2672 100644
 --- a/package/libs/libnftnl/Makefile
 +++ b/package/libs/libnftnl/Makefile
 @@ -9,17 +9,17 @@ include $(TOPDIR)/rules.mk
- 
  PKG_NAME:=libnftnl
  PKG_CPE_ID:=cpe:/a:netfilter:libnftnl
 -PKG_VERSION:=1.2.1
@@ -2319,8 +2326,7 @@ index 8434234156..5342ac2672 100644
 +PKG_FIXUP:=autoreconf
  PKG_INSTALL:=1
  PKG_BUILD_PARALLEL:=1
- 
-diff --git a/package/libs/libnftnl/patches/999-01-libnftnl-add-fullcone-expression-support.patch b/package/libs/libnftnl/patches/999-01-libnftnl-add-fullcone-expression-support.patch
+ diff --git a/package/libs/libnftnl/patches/999-01-libnftnl-add-fullcone-expression-support.patch b/package/libs/libnftnl/patches/999-01-libnftnl-add-fullcone-expression-support.patch
 new file mode 100644
 index 0000000000..0e8b349c38
 --- /dev/null
@@ -2862,7 +2868,7 @@ index b9e896a9f7..0af8deeb68 100644
  
  PKG_FIXUP:=autoreconf
  PKG_INSTALL:=1
-diff --git a/package/network/utils/nftables/patches/0001-fix-nft.patch b/package/network/utils/nftables/patches/0001-fix-nft.patch
+ diff --git a/package/network/utils/nftables/patches/0001-fix-nft.patch b/package/network/utils/nftables/patches/0001-fix-nft.patch
 new file mode 100644
 index 0000000000..2138e254e8
 --- /dev/null
