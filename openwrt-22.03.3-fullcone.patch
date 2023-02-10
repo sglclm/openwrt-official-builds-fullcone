@@ -2326,7 +2326,7 @@ index 8434234156..5342ac2672 100644
 +PKG_FIXUP:=autoreconf
  PKG_INSTALL:=1
  PKG_BUILD_PARALLEL:=1
- diff --git a/package/libs/libnftnl/patches/999-01-libnftnl-add-fullcone-expression-support.patch b/package/libs/libnftnl/patches/999-01-libnftnl-add-fullcone-expression-support.patch
+diff --git a/package/libs/libnftnl/patches/999-01-libnftnl-add-fullcone-expression-support.patch b/package/libs/libnftnl/patches/999-01-libnftnl-add-fullcone-expression-support.patch
 new file mode 100644
 index 0000000000..0e8b349c38
 --- /dev/null
