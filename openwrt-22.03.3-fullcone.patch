@@ -1828,6 +1828,7 @@ index 0000000000..289ce5c443
 +	memset(&dst->max_addr, 0, sizeof(dst->max_addr));
 +	// base_proto is nf_nat_range2 specific
 +	memset(&dst->base_proto, 0, sizeof(dst->base_proto));
++
 +	dst->flags	 = src->flags;
 +	dst->min_addr.ip = src->min_ip;
 +	dst->max_addr.ip = src->max_ip;
