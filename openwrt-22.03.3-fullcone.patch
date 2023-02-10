@@ -2308,7 +2308,6 @@ index 8434234156..5342ac2672 100644
 --- a/package/libs/libnftnl/Makefile
 +++ b/package/libs/libnftnl/Makefile
 @@ -9,17 +9,17 @@ include $(TOPDIR)/rules.mk
- 
  PKG_NAME:=libnftnl
  PKG_CPE_ID:=cpe:/a:netfilter:libnftnl
 -PKG_VERSION:=1.2.1
@@ -2328,7 +2327,6 @@ index 8434234156..5342ac2672 100644
 +PKG_FIXUP:=autoreconf
  PKG_INSTALL:=1
  PKG_BUILD_PARALLEL:=1
- 
 diff --git a/package/libs/libnftnl/patches/999-01-libnftnl-add-fullcone-expression-support.patch b/package/libs/libnftnl/patches/999-01-libnftnl-add-fullcone-expression-support.patch
 new file mode 100644
 index 0000000000..0e8b349c38
@@ -2871,7 +2869,7 @@ index b9e896a9f7..0af8deeb68 100644
  
  PKG_FIXUP:=autoreconf
  PKG_INSTALL:=1
-diff --git a/package/network/utils/nftables/patches/0001-fix-nft.patch b/package/network/utils/nftables/patches/0001-fix-nft.patch
+ diff --git a/package/network/utils/nftables/patches/0001-fix-nft.patch b/package/network/utils/nftables/patches/0001-fix-nft.patch
 new file mode 100644
 index 0000000000..2138e254e8
 --- /dev/null
